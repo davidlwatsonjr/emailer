@@ -3,8 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const { sendEmail } = require("./src/emailer");
 
-const { API_KEY } = process.env;
-
 const app = express();
 
 app.use(express.static("public"));
@@ -16,6 +14,7 @@ app.use((req, res, next) => {
 });
 
 // Authenticate request
+const { API_KEY } = process.env;
 app.use((req, res, next) => {
   const { headers } = req;
 
