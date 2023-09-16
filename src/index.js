@@ -1,11 +1,9 @@
 require("dotenv").config();
 
 const express = require("express");
-const { sendEmail } = require("./src/lib/emailer");
+const { sendEmail } = require("./lib/emailer");
 
 const app = express();
-
-app.use(express.static("public"));
 
 // Log request
 app.use((req, res, next) => {
