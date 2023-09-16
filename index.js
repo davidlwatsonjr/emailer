@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
-const { sendEmail } = require("./src/emailer");
+const { sendEmail } = require("./src/lib/emailer");
 
 const app = express();
 
