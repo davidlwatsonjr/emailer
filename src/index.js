@@ -1,48 +1,26 @@
 require("dotenv").config();
 
 const express = require("express");
-const { sendEmail } = require("./lib/emailer");
+
+const { gcpLogTransformer, requestLogger } = require("./middleware/logging");
+const { authAPIRequest } = require("./middleware/apiAuth");
+const { send } = require("./controllers/emailer");
+const { serverErrorHandler } = require("./middleware/errors");
 
 const app = express();
 
-// Log request
-app.use((req, res, next) => {
-  console.log(`${req.method} request for '${req.url}'`);
-  next();
-});
-
-// Authenticate request
-const { API_KEY } = process.env;
-app.use((req, res, next) => {
-  const { headers } = req;
-
-  if (headers["x-api-key"] !== API_KEY) {
-    console.warn(`Invalid API key: ${headers["x-api-key"]}`);
-    res.status(401).send({ error: "Invalid API key" });
-  } else {
-    next();
-  }
-});
+app.use(gcpLogTransformer);
+app.use(requestLogger);
 
 app.get("/ping", async (req, res) => {
   res.send("pong");
 });
 
-app.get("/send", async (req, res) => {
-  const { to, subject, body } = req.query;
-  const response = { success: false, query: req.query };
+app.use(authAPIRequest);
 
-  try {
-    const info = await sendEmail(to, subject, body);
-    console.log(`Email sent: ${info.response}`);
-    response.success = true;
-  } catch (error) {
-    console.log(`Error occurred: ${error.message}`);
-    response.error = error;
-  }
+app.get("/send", send);
 
-  res.send(response);
-});
+app.use(serverErrorHandler);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
