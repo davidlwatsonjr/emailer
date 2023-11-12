@@ -29,11 +29,11 @@ app.get("/ping", async (req, res) => {
 });
 
 app.get("/send", async (req, res) => {
-  const { to, subject, text } = req.query;
+  const { to, subject, body } = req.query;
   const response = { success: false, query: req.query };
 
   try {
-    const info = await sendEmail(to, subject, text);
+    const info = await sendEmail(to, subject, body);
     console.log(`Email sent: ${info.response}`);
     response.success = true;
   } catch (error) {
