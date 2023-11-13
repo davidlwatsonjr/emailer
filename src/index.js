@@ -2,10 +2,13 @@ require("dotenv").config();
 
 const express = require("express");
 
-const { gcpLogTransformer, requestLogger } = require("./middleware/logging");
-const { authAPIRequest } = require("./middleware/apiAuth");
+const {
+  gcpLogTransformer,
+  requestLogger,
+  authAPIRequest,
+  serverErrorHandler,
+} = require("@davidlwatsonjr/microservice-middleware");
 const { send } = require("./controllers/emailer");
-const { serverErrorHandler } = require("./middleware/errors");
 
 const app = express();
 
