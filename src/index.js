@@ -28,6 +28,6 @@ app.use(serverErrorHandler);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(
-    `The emailer container started successfully and is listening for HTTP requests on ${PORT}`
+    `The emailer container started successfully and is listening for HTTP requests on ${PORT}`,
   );
 });
